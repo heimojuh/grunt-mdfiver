@@ -20,4 +20,9 @@ describe('mdfiver tests', function() {
         md.parseHead(scriptHtml);
         expect(md.getScriptTags()[0].getAttribute("src")).to.be("foo/script.js");
     });
+
+    it("Get's LINK tag from head", function() {
+        md.parseHead(cssHtml);
+        expect(md.getCSSTags()[0].getAttribute("href")).to.be("foo/styles.css");
+    });
 });
