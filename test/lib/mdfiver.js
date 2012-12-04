@@ -5,6 +5,7 @@ var grunt = require('grunt'),
 describe('mdfiver tests', function() {
     var plainHtml = "<html><head>HEAD CONTENT</head><body></body><html>";
     var scriptHtml = "<html><head><script type='text/javascript' src='foo/script.js'></script></head><body></body><html>";
+    var cssHtml = "<html><head><script type='text/javascript' src='foo/script.js'></script><LINK href='foo/styles.css' rel='stylesheet' type='text/css'></head><body></body><html>";
     var md = new mdfiver();
 
     it("mdfiver has empty head", function() {

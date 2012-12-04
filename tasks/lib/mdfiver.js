@@ -16,4 +16,8 @@ mdfiver.prototype.getScriptTags = function() {
     return this.head.getElementsByTagName("script");
 };
 
+mdfiver.prototype.getCSSTags = function() {
+    return this.head.getElementsByTagName("link");
+};
+
 module.exports = mdfiver;
