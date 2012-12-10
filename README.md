@@ -1,8 +1,11 @@
 # grunt-mdfiver
 
-Calculates md5s for cache busting
+Calculates md5s for cache busting, at least it should, when done.
 
 ## Getting Started
+
+well, not yet anyway.
+
 Install this grunt plugin next to your project's [grunt.js gruntfile][getting_started] with: `npm install grunt-mdfiver`
 
 Then add this line to your project's `grunt.js` gruntfile:
