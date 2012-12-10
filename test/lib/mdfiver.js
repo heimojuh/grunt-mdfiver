@@ -27,7 +27,7 @@ describe('mdfiver tests', function() {
         expect(md.getCSSTags()[0].getAttribute("href")).to.be("foo/styles.css");
     });
 
-    it("Calculates MD5 from given file and returns {filename, md5}", function() {
-    
+    it("Calculates MD5 from given file and returns {filename: md5}", function() {
+        expect(md.createMD5FromFile("test/data/index.html")).to.be({"test/data/index.html":""});
     });
 });
