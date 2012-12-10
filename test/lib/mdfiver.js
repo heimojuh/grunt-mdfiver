@@ -37,7 +37,7 @@ describe('mdfiver tests', function() {
         var filecontent = fs.readFileSync(testfile);
         md.parseHead(filecontent);
         var fixedHead = md.fixHeadEntry({filename: "css/bootstrap-responsive.min.css", md5: "6969"});
-        expect(fixedHead.innerHTML.indexOf("css/bootstrap-responsive.min_6969.css")).not.to.be(-1);
+        expect(fixedHead.indexOf("css/bootstrap-responsive.min_6969.css")).not.to.be(-1);
         
 
     });
