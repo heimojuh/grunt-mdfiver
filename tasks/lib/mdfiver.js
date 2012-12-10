@@ -38,4 +38,8 @@ mdfiver.prototype.createMD5FromFile = function(file) {
     return {filename: file, md5:  md5(data)};
 };
 
+mdfiver.prototype.fixHeadEntry = function(replaceEntity) {
+    return this.head;
+};
+
 module.exports = mdfiver;
