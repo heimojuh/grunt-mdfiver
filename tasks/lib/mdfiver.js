@@ -1,9 +1,12 @@
 var jsdom = require("jsdom").jsdom;
+var EventEmitter = require("events").EventEmitter;
 
 function mdfiver() {
     this.head = "";
 
 }
+
+mdfiver.prototype = Object.create(EventEmitter.prototype);
 
 mdfiver.prototype.parseHead = function(html) {
     this.head = jsdom( 
