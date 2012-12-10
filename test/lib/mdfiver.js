@@ -28,6 +28,6 @@ describe('mdfiver tests', function() {
     });
 
     it("Calculates MD5 from given file and returns {filename: md5}", function() {
-        expect(md.createMD5FromFile("test/data/index.html")).to.be({"test/data/index.html":""});
+        expect(md.createMD5FromFile("test/data/index.html")).to.eql({filename: "test/data/index.html", md5: "9e4b0fb7f0847c3d5d370f9f0b1d8266"});
     });
 });

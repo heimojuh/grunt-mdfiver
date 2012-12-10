@@ -1,5 +1,7 @@
 var jsdom = require("jsdom").jsdom;
-var EventEmitter = require("events").EventEmitter;
+var EventEmitter = require("events").EventEmitter,
+    md5 = require('MD5'),
+    fs = require("fs");
 
 function mdfiver() {
     this.head = "";
@@ -31,8 +33,9 @@ mdfiver.prototype.getCSSTags = function() {
  * @method createMD5FromFile
  * @param file file with path
  **/
-mdfiver.prototype.createMD5FromFile = function() {
-
+mdfiver.prototype.createMD5FromFile = function(file) {
+    var data = fs.readFileSync(file, "utf8");
+    return {filename: file, md5:  md5(data)};
 };
 
 module.exports = mdfiver;
