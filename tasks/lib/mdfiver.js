@@ -23,4 +23,16 @@ mdfiver.prototype.getCSSTags = function() {
     return this.head.getElementsByTagName("link");
 };
 
+/***
+ * Calculates MD5 from chosen file
+ *
+ * Returns {"filenamewithpath", "md5"}
+ *
+ * @method createMD5FromFile
+ * @param file file with path
+ **/
+mdfiver.prototype.createMD5FromFile = function() {
+
+};
+
 module.exports = mdfiver;
