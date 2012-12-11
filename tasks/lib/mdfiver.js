@@ -1,10 +1,15 @@
 var jsdom = require("jsdom").jsdom;
-var EventEmitter = require("events").EventEmitter,
     md5 = require('MD5'),
-    fs = require("fs");
+    fs = require("fs"),
+    _ = require("underscore");
 
-function mdfiver() {
+
+function mdfiver(htmlfile) {
     this.head = "";
+    this.htmlfile = htmlfile;
+    if (this.htmlfile) {
+        this.html = fs.readFileSync(htmlfile);
+    }
 
 }
 
@@ -17,21 +22,27 @@ function createReplaceString(originalFileNameAndMd5) {
 
 }
 
-mdfiver.prototype = Object.create(EventEmitter.prototype);
-
-mdfiver.prototype.parseHead = function(html) {
+mdfiver.prototype.parseHead = function() {
     this.head = jsdom( 
-        html,
+        this.html,
         null
     ).createWindow().document.getElementsByTagName("head")[0];
 };
 
-mdfiver.prototype.getScriptTags = function() {
-    return this.head.getElementsByTagName("script");
+mdfiver.prototype.getScriptTagsPaths = function() {
+    var paths = [];
+    _.each(this.head.getElementsByTagName("script"), function(element) {
+        paths.push(element.getAttribute("src"));
+    });
+    return paths;
 };
 
-mdfiver.prototype.getCSSTags = function() {
-    return this.head.getElementsByTagName("link");
+mdfiver.prototype.getCSSTagsPaths = function() {
+    var paths = [];
+    _.each(this.head.getElementsByTagName("link"), function(element) {
+        paths.push(element.getAttribute("href"));
+    });
+    return paths;
 };
 
 /***

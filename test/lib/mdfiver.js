@@ -20,18 +20,21 @@ describe('mdfiver tests', function() {
     });
 
     it("Head content after parseHead is HEAD CONTENT", function() {
-       md.parseHead(plainHtml);
+       md.html = plainHtml;
+       md.parseHead();
        expect(md.head.innerHTML).to.be("HEAD CONTENT");
     });
 
-    it("Get's script tag from head", function(){
-        md.parseHead(scriptHtml);
-        expect(md.getScriptTags()[0].getAttribute("src")).to.be("foo/script.js");
+    it("Get's script tag path from head", function(){
+        md.html = scriptHtml;
+        md.parseHead();
+        expect(md.getScriptTagsPaths()[0]).to.be("foo/script.js");
     });
 
     it("Get's LINK tag from head", function() {
-        md.parseHead(cssHtml);
-        expect(md.getCSSTags()[0].getAttribute("href")).to.be("foo/styles.css");
+        md.html = cssHtml;
+        md.parseHead();
+        expect(md.getCSSTagsPaths()[0]).to.be("foo/styles.css");
     });
 
     it("Calculates MD5 from given file and returns {filename: md5}", function() {
@@ -40,6 +43,7 @@ describe('mdfiver tests', function() {
 
     it("replaces filename with md5 amended version based on fed object", function() {
         var filecontent = fs.readFileSync(testfile);
+        md.html = filecontent;
         md.parseHead(filecontent);
         var fixedHead = md.fixHeadEntry({filename: "css/bootstrap-responsive.min.css", md5: "6969"});
         expect(fixedHead.indexOf("css/bootstrap-responsive.min_6969.css")).not.to.be(-1);
