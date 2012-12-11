@@ -31,6 +31,12 @@ describe('mdfiver tests', function() {
         expect(md.getScriptTagsPaths()[0]).to.be("foo/script.js");
     });
 
+    it("Returns empty array on empty head", function() {
+        md.html = "<html><head></head></html>";
+        md.parseHead();
+        expect(md.getScriptTagsPaths()).to.be.empty();
+    });
+
     it("Get's LINK tag from head", function() {
         md.html = cssHtml;
         md.parseHead();

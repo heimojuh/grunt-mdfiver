@@ -48,7 +48,7 @@ mdfiver.prototype.getCSSTagsPaths = function() {
 /***
 * Calculates MD5 from chosen file
 *
-* Returns {"filenamewithpath", "md5"}
+* Returns {filename: "filenamewithpath", md5: "md5"}
 *
 * @method createMD5FromFile
 * @param file file with path
