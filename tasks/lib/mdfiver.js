@@ -58,9 +58,9 @@ mdfiver.prototype.createMD5FromFile = function(file) {
     return {filename: file, md5:  md5(data)};
 };
 
-mdfiver.prototype.fixHeadEntry = function(replaceEntity) {
+mdfiver.prototype.fixHtml = function(replaceEntity) {
     var newFileName = createReplaceString(replaceEntity);
-    return this.head.innerHTML.replace(replaceEntity.filename, newFileName);
+    return ""+this.html.replace(replaceEntity.filename, newFileName);
 };
 
 mdfiver.prototype.renameFile = function(originalFileNameAndMd5) {

@@ -48,11 +48,10 @@ describe('mdfiver tests', function() {
     });
 
     it("replaces filename with md5 amended version based on fed object", function() {
-        var filecontent = fs.readFileSync(testfile);
+        var filecontent = fs.readFileSync(testfile, "utf8");
         md.html = filecontent;
-        md.parseHead(filecontent);
-        var fixedHead = md.fixHeadEntry({filename: "css/bootstrap-responsive.min.css", md5: "6969"});
-        expect(fixedHead.indexOf("css/bootstrap-responsive.min_6969.css")).not.to.be(-1);
+        var fixed = md.fixHtml({filename: "css/bootstrap-responsive.min.css", md5: "6969"});
+        expect(fixed.indexOf("css/bootstrap-responsive.min_6969.css")).not.to.be(-1);
     });
 
     it("renames file on filesystem", function() {
