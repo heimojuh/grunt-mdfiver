@@ -55,6 +55,7 @@ mdfiver.prototype.getPaths = function(tag) {
     });
     return paths;
 };
+
 /***
 * Calculates MD5 from chosen file
 *
@@ -89,10 +90,7 @@ mdfiver.prototype.handleAssets = function() {
             var suffix = it.suffix || "";
             var md = that.createMD5FromFile(path);
             that.renameFile(md);
-            that.emit("log", suffix);
             md.filename = md.filename.replace(suffix, "");
-            that.emit("log", md);
-
             that.html = that.fixHtml(md);
         });
     });
