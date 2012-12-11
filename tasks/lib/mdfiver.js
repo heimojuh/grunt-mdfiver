@@ -8,7 +8,7 @@ function mdfiver(htmlfile) {
     this.head = "";
     this.htmlfile = htmlfile;
     if (this.htmlfile) {
-        this.html = fs.readFileSync(htmlfile);
+        this.html = fs.readFileSync(htmlfile, "utf8");
     }
 
 }
@@ -60,7 +60,7 @@ mdfiver.prototype.createMD5FromFile = function(file) {
 
 mdfiver.prototype.fixHtml = function(replaceEntity) {
     var newFileName = createReplaceString(replaceEntity);
-    return ""+this.html.replace(replaceEntity.filename, newFileName);
+    return this.html.replace(replaceEntity.filename, newFileName);
 };
 
 mdfiver.prototype.renameFile = function(originalFileNameAndMd5) {
