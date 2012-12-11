@@ -52,4 +52,8 @@ mdfiver.prototype.fixHeadEntry = function(replaceEntity) {
     return this.head.innerHTML.replace(replaceEntity.filename, newFileName);
 };
 
+mdfiver.prototype.renameFile = function(originalFileNameAndMd5) {
+    fs.renameSync(originalFileNameAndMd5.filename, createReplaceString(originalFileNameAndMd5));
+};
+
 module.exports = mdfiver;

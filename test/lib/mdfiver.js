@@ -4,6 +4,11 @@ var grunt = require('grunt'),
     mdfiver = require('../../tasks/lib/mdfiver');
 
 describe('mdfiver tests', function() {
+
+    function createTestFile(file) {
+        fs.writeFileSync(file, "testcontent", "utf8");
+        return md.createMD5FromFile(file).md5;
+    }
     var plainHtml = "<html><head>HEAD CONTENT</head><body></body><html>";
     var scriptHtml = "<html><head><script type='text/javascript' src='foo/script.js'></script></head><body></body><html>";
     var cssHtml = "<html><head><script type='text/javascript' src='foo/script.js'></script><LINK href='foo/styles.css' rel='stylesheet' type='text/css'></head><body></body><html>";
@@ -38,7 +43,14 @@ describe('mdfiver tests', function() {
         md.parseHead(filecontent);
         var fixedHead = md.fixHeadEntry({filename: "css/bootstrap-responsive.min.css", md5: "6969"});
         expect(fixedHead.indexOf("css/bootstrap-responsive.min_6969.css")).not.to.be(-1);
-        
+    });
 
+    it("renames file on filesystem", function() {
+        var testf = "test/tmp/testfile.txt";
+        var md5hash = createTestFile(testf);
+        var endResult = "test/tmp/testfile_"+md5hash+".txt";
+        md.renameFile({filename: testf, md5: md5hash});
+        expect(fs.existsSync(endResult)).to.be.ok();
+        fs.unlink(endResult);
     });
 });
