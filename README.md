@@ -19,6 +19,15 @@ grunt.loadNpmTasks('grunt-mdfiver');
 
 ## Documentation
 _(Coming soon)_
+´´´javascript
+mdfiver: {
+    all: {
+        htmlfile: "build-dir/index.html",
+              basepath: "build-dir/",
+              tags: [{tag:"script", attr:"src"}, {tag:"link", attr:"href"}, {tag:"script", attr:"data-main", suffix: ".js"}]
+    }
+}
+´´´
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt][grunt].
