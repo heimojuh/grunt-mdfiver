@@ -9,7 +9,7 @@ function mdfiver(options) {
     this.head = "";
     this.basepath = options.basepath || "";
     this.htmlfile = options.htmlfile;
-    this.tags = options.tags || [{tag:"script",attr:"src"},{tag:"css",attr:"href"}];
+    this.tags = options.tags || [{tag:"script",attr:"src"},{tag:"link",attr:"href"}];
     if (this.htmlfile) {
         this.html = fs.readFileSync(this.htmlfile, "utf8");
     }
@@ -37,8 +37,9 @@ mdfiver.prototype.parseToDom = function() {
 mdfiver.prototype.getPaths = function(tag) {
     var that = this;
     var paths = [];
+    var suffix = tag.suffix || "";
     _.each(this.head.getElementsByTagName(tag.tag), function(element) {
-        var p = element.getAttribute(tag.attr);
+        var p = element.getAttribute(tag.attr)+suffix;
         that.emit("log", "found path: "+p);  
         if (p.indexOf("http://") === -1 && p !== "") {
             paths.push(p);
@@ -49,15 +50,6 @@ mdfiver.prototype.getPaths = function(tag) {
     });
     return paths;
 };
-
-mdfiver.prototype.getCSSTagsPaths = function() {
-    var paths = [];
-    _.each(this.head.getElementsByTagName("link"), function(element) {
-        paths.push(element.getAttribute("href"));
-    });
-    return paths;
-};
-
 /***
 * Calculates MD5 from chosen file
 *
@@ -87,16 +79,14 @@ mdfiver.prototype.handleAssets = function() {
     var files_with_md5 = [];
     this.parseToDom();
     var that = this;
-    var htmlcontent = this.html;
-
     _.each(this.tags, function(it) {
         _.each(that.getPaths(it), function(path) {
             var md = that.createMD5FromFile(path);
             that.renameFile(md);
-            htmlcontent = that.fixHtml(md);
+            that.html = that.fixHtml(md);
         });
     });
-    fs.writeFileSync(this.htmlfile, htmlcontent);
+    fs.writeFileSync(this.htmlfile, this.html);
 };
 
 module.exports = mdfiver;

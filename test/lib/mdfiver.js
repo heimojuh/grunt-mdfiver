@@ -11,6 +11,7 @@ describe('mdfiver tests', function() {
     }
     var plainHtml = "<html><head>HEAD CONTENT</head><body></body><html>";
     var scriptHtml = "<html><head><script type='text/javascript' src='foo/script.js'></script></head><body></body><html>";
+    var scriptHtmlRjs = "<html><head><script type='text/javascript' src='foo/require.js' data-main='foo/script'></script></head><body></body><html>";
     var cssHtml = "<html><head><script type='text/javascript' src='foo/script.js'></script><LINK href='foo/styles.css' rel='stylesheet' type='text/css'></head><body></body><html>";
     var testfile = "test/data/index.html";
     var md = new mdfiver({});
@@ -35,6 +36,13 @@ describe('mdfiver tests', function() {
         md.html = "<html><head></head></html>";
         md.parseToDom();
         expect(md.getPaths({tag:"script",attr:"src"})).to.be.empty();
+    });
+
+    it("manages to fill in suffix (for r.js mostly)", function() {
+        md.html = scriptHtmlRjs;
+        md.parseToDom();
+        expect(md.getPaths({tag:"script", attr:"data-main", suffix: ".js"})[0]).to.be("foo/script.js");
+    
     });
 
     it("Get's LINK tag from head", function() {
