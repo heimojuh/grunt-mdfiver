@@ -9,7 +9,7 @@ function mdfiver(options) {
     this.head = "";
     this.basepath = options.basepath || "";
     this.htmlfile = options.htmlfile;
-    this.tags = options.tags || [{tag:"script",attr:"src"},{tag:"link",attr:"href"}];
+    this.tags = options.tags || [{tag:"script",attr:"src"},{tag:"link",attr:"href"},{tag:"script",attr:"data-main", suffix: ".js"}];
     if (this.htmlfile) {
         this.html = fs.readFileSync(this.htmlfile, "utf8");
     }
@@ -23,7 +23,12 @@ function createReplaceString(originalFileNameAndMd5) {
     var start = originalFileNameAndMd5.filename.substring(0,lastIndexOfPoint);
     var end = originalFileNameAndMd5.filename.substring(lastIndexOfPoint
     );
+    if (start !== "") {
     return start+"_"+originalFileNameAndMd5.md5+end;
+    }
+    else {
+        return originalFileNameAndMd5.filename+"_"+originalFileNameAndMd5.md5;
+    }
 
 }
 
@@ -39,10 +44,10 @@ mdfiver.prototype.getPaths = function(tag) {
     var paths = [];
     var suffix = tag.suffix || "";
     _.each(this.head.getElementsByTagName(tag.tag), function(element) {
-        var p = element.getAttribute(tag.attr)+suffix;
+        var p = element.getAttribute(tag.attr);
         that.emit("log", "found path: "+p);  
         if (p.indexOf("http://") === -1 && p !== "") {
-            paths.push(p);
+            paths.push(p+suffix);
         }
         else {
             that.emit("log", "dropped: "+p);
@@ -81,8 +86,13 @@ mdfiver.prototype.handleAssets = function() {
     var that = this;
     _.each(this.tags, function(it) {
         _.each(that.getPaths(it), function(path) {
+            var suffix = it.suffix || "";
             var md = that.createMD5FromFile(path);
             that.renameFile(md);
+            that.emit("log", suffix);
+            md.filename = md.filename.replace(suffix, "");
+            that.emit("log", md);
+
             that.html = that.fixHtml(md);
         });
     });
