@@ -26,7 +26,7 @@ mdfiver.prototype.parseHead = function() {
     this.head = jsdom( 
         this.html,
         null
-    ).createWindow().document.getElementsByTagName("head")[0];
+    ).createWindow().document.getElementsByTagName("html")[0];
 };
 
 mdfiver.prototype.getScriptTagsPaths = function() {
@@ -65,6 +65,25 @@ mdfiver.prototype.fixHtml = function(replaceEntity) {
 
 mdfiver.prototype.renameFile = function(originalFileNameAndMd5) {
     fs.renameSync(originalFileNameAndMd5.filename, createReplaceString(originalFileNameAndMd5));
+};
+
+mdfiver.prototype.handleAssets = function() {
+    var files = [];
+    var files_with_md5 = [];
+    this.parseHead();
+    var that = this;
+    console.log(this.head.innerHTML);
+    var htmlcontent = this.html;
+    console.log(this.getScriptTagsPaths());
+    files = files.concat(this.getScriptTagsPaths(), this.getCSSTagsPaths());
+    console.log(files);
+    _.each(files, function(it) {
+        var md = that.createMD5FromFile(it);
+        that.renameFile(md);
+        htmlcontent = that.fixHtml(md);
+    });
+
+    fs.writeFileSync(this.htmlfile, htmlcontent);
 };
 
 module.exports = mdfiver;

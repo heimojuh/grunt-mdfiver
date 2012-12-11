@@ -19,10 +19,10 @@ describe('mdfiver tests', function() {
         expect(md.head).to.be("");
     });
 
-    it("Head content after parseHead is HEAD CONTENT", function() {
+    it("Head content after parseHead to contain HEAD CONTENT", function() {
        md.html = plainHtml;
        md.parseHead();
-       expect(md.head.innerHTML).to.be("HEAD CONTENT");
+       expect(md.head.innerHTML).to.contain("HEAD CONTENT");
     });
 
     it("Get's script tag path from head", function(){
@@ -61,5 +61,21 @@ describe('mdfiver tests', function() {
         md.renameFile({filename: testf, md5: md5hash});
         expect(fs.existsSync(endResult)).to.be.ok();
         fs.unlink(endResult);
+    });
+
+    it("handles assets", function() {
+        var html = "<html><head><script type='text/javascript' src='test/tmp/testfile.js'></script></head><body></body></html>";
+        var htmlfile = "test/tmp/html.html";
+        fs.writeFileSync(htmlfile, html);
+        var testf = "test/tmp/testfile.js";
+        var md5hash = createTestFile(testf);
+        var endResult = "test/tmp/testfile_"+md5hash+".js";
+        md.html = html;
+        md.htmlfile = htmlfile;
+        md.handleAssets();
+        expect(fs.existsSync(endResult)).to.be.ok();
+        fs.unlink(endResult);
+        fs.unlink(htmlfile);
+
     });
 });
