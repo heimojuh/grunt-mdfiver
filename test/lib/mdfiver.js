@@ -13,34 +13,34 @@ describe('mdfiver tests', function() {
     var scriptHtml = "<html><head><script type='text/javascript' src='foo/script.js'></script></head><body></body><html>";
     var cssHtml = "<html><head><script type='text/javascript' src='foo/script.js'></script><LINK href='foo/styles.css' rel='stylesheet' type='text/css'></head><body></body><html>";
     var testfile = "test/data/index.html";
-    var md = new mdfiver();
+    var md = new mdfiver({});
 
     it("mdfiver has empty head", function() {
         expect(md.head).to.be("");
     });
 
-    it("Head content after parseHead to contain HEAD CONTENT", function() {
+    it("Head content after parseToDom to contain HEAD CONTENT", function() {
        md.html = plainHtml;
-       md.parseHead();
+       md.parseToDom();
        expect(md.head.innerHTML).to.contain("HEAD CONTENT");
     });
 
     it("Get's script tag path from head", function(){
         md.html = scriptHtml;
-        md.parseHead();
-        expect(md.getScriptTagsPaths()[0]).to.be("foo/script.js");
+        md.parseToDom();
+        expect(md.getPaths({tag:"script", attr:"src"})[0]).to.be("foo/script.js");
     });
 
     it("Returns empty array on empty head", function() {
         md.html = "<html><head></head></html>";
-        md.parseHead();
-        expect(md.getScriptTagsPaths()).to.be.empty();
+        md.parseToDom();
+        expect(md.getPaths({tag:"script",attr:"src"})).to.be.empty();
     });
 
     it("Get's LINK tag from head", function() {
         md.html = cssHtml;
-        md.parseHead();
-        expect(md.getCSSTagsPaths()[0]).to.be("foo/styles.css");
+        md.parseToDom();
+        expect(md.getPaths({tag:"link",attr:"href"})[0]).to.be("foo/styles.css");
     });
 
     it("Calculates MD5 from given file and returns {filename: md5}", function() {

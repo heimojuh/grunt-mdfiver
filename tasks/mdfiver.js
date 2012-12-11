@@ -6,25 +6,30 @@
  * Licensed under the MIT license.
  */
 
+var mdfiver = require('./lib/mdfiver.js');
 module.exports = function(grunt) {
 
-  // Please see the grunt documentation for more information regarding task and
-  // helper creation: https://github.com/gruntjs/grunt/blob/master/docs/toc.md
 
   // ==========================================================================
   // TASKS
   // ==========================================================================
 
-  grunt.registerTask('mdfiver', 'Your task description goes here.', function() {
-    grunt.log.write(grunt.helper('mdfiver'));
+  grunt.registerMultiTask('mdfiver', 'Cache bust with MD5', function() {
+
+    var done = this.async();
+    var options = this.data;
+    var mdfive = new mdfiver(options);
+    mdfive.on("log", function(msg) {
+        grunt.log.writeln(msg);
+    });
+
+    mdfive.on("error", function() {
+        done(false);
+    });
+    mdfive.handleAssets();
+    done();
+
   });
 
-  // ==========================================================================
-  // HELPERS
-  // ==========================================================================
-
-  grunt.registerHelper('mdfiver', function() {
-    return 'mdfiver!!!';
-  });
 
 };

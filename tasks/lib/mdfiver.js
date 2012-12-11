@@ -1,17 +1,22 @@
 var jsdom = require("jsdom").jsdom;
     md5 = require('MD5'),
     fs = require("fs"),
-    _ = require("underscore");
+    _ = require("underscore"),
+    EventEmitter = require('events').EventEmitter;
 
 
-function mdfiver(htmlfile) {
+function mdfiver(options) {
     this.head = "";
-    this.htmlfile = htmlfile;
+    this.basepath = options.basepath || "";
+    this.htmlfile = options.htmlfile;
+    this.tags = options.tags || [{tag:"script",attr:"src"},{tag:"css",attr:"href"}];
     if (this.htmlfile) {
-        this.html = fs.readFileSync(htmlfile, "utf8");
+        this.html = fs.readFileSync(this.htmlfile, "utf8");
     }
 
 }
+
+mdfiver.prototype = Object.create(EventEmitter.prototype);
 
 function createReplaceString(originalFileNameAndMd5) {
     var lastIndexOfPoint = originalFileNameAndMd5.filename.lastIndexOf(".");
@@ -22,17 +27,25 @@ function createReplaceString(originalFileNameAndMd5) {
 
 }
 
-mdfiver.prototype.parseHead = function() {
+mdfiver.prototype.parseToDom = function() {
     this.head = jsdom( 
         this.html,
         null
     ).createWindow().document.getElementsByTagName("html")[0];
 };
 
-mdfiver.prototype.getScriptTagsPaths = function() {
+mdfiver.prototype.getPaths = function(tag) {
+    var that = this;
     var paths = [];
-    _.each(this.head.getElementsByTagName("script"), function(element) {
-        paths.push(element.getAttribute("src"));
+    _.each(this.head.getElementsByTagName(tag.tag), function(element) {
+        var p = element.getAttribute(tag.attr);
+        that.emit("log", "found path: "+p);  
+        if (p.indexOf("http://") === -1 && p !== "") {
+            paths.push(p);
+        }
+        else {
+            that.emit("log", "dropped: "+p);
+        }
     });
     return paths;
 };
@@ -54,6 +67,7 @@ mdfiver.prototype.getCSSTagsPaths = function() {
 * @param file file with path
 **/
 mdfiver.prototype.createMD5FromFile = function(file) {
+    this.emit("log", "md5 from: "+file);
     var data = fs.readFileSync(file, "utf8");
     return {filename: file, md5:  md5(data)};
 };
@@ -64,25 +78,24 @@ mdfiver.prototype.fixHtml = function(replaceEntity) {
 };
 
 mdfiver.prototype.renameFile = function(originalFileNameAndMd5) {
-    fs.renameSync(originalFileNameAndMd5.filename, createReplaceString(originalFileNameAndMd5));
+    this.emit("log", "renaming: "+originalFileNameAndMd5.filename);
+    fs.renameSync(this.basepath+originalFileNameAndMd5.filename, this.basepath+createReplaceString(originalFileNameAndMd5));
 };
 
 mdfiver.prototype.handleAssets = function() {
     var files = [];
     var files_with_md5 = [];
-    this.parseHead();
+    this.parseToDom();
     var that = this;
-    console.log(this.head.innerHTML);
     var htmlcontent = this.html;
-    console.log(this.getScriptTagsPaths());
-    files = files.concat(this.getScriptTagsPaths(), this.getCSSTagsPaths());
-    console.log(files);
-    _.each(files, function(it) {
-        var md = that.createMD5FromFile(it);
-        that.renameFile(md);
-        htmlcontent = that.fixHtml(md);
-    });
 
+    _.each(this.tags, function(it) {
+        _.each(that.getPaths(it), function(path) {
+            var md = that.createMD5FromFile(path);
+            that.renameFile(md);
+            htmlcontent = that.fixHtml(md);
+        });
+    });
     fs.writeFileSync(this.htmlfile, htmlcontent);
 };
 
