@@ -1,8 +1,8 @@
 var jsdom = require("jsdom").jsdom;
-    md5 = require('MD5'),
-    fs = require("fs"),
-    _ = require("underscore"),
-    EventEmitter = require('events').EventEmitter;
+md5 = require('MD5'),
+fs = require("fs"),
+_ = require("underscore"),
+EventEmitter = require('events').EventEmitter;
 
 
 function mdfiver(options) {
@@ -24,7 +24,7 @@ function createReplaceString(originalFileNameAndMd5) {
     var end = originalFileNameAndMd5.filename.substring(lastIndexOfPoint
     );
     if (start !== "") {
-    return start+"_"+originalFileNameAndMd5.md5+end;
+        return start+"_"+originalFileNameAndMd5.md5+end;
     }
     else {
         return originalFileNameAndMd5.filename+"_"+originalFileNameAndMd5.md5;
