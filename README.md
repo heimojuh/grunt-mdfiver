@@ -10,12 +10,6 @@ Note that this will overwrite the htmlfile, as well as rename the assets it find
 
 Install this grunt plugin next to your project's [grunt.js gruntfile][getting_started]
 
-Then add this line to your project's `grunt.js` gruntfile:
-
-```javascript
-grunt.loadNpmTasks('grunt-mdfiver');
-```
-
 [grunt]: http://gruntjs.com/
 [getting_started]: https://github.com/gruntjs/grunt/blob/master/docs/getting_started.md
 
