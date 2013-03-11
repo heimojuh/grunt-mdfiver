@@ -28,7 +28,8 @@
     "test": "grunt test"
   },
   "devDependencies": {
-    "wrench": "~1.4.4"
+    "grunt-simple-mocha": "~0.3.2",
+    "expect.js": "~0.2.0"
   },
   "keywords": [
     "gruntplugin"
@@ -37,6 +38,7 @@
     "grunt": "~0.4.0",
     "MD5": "~1.0.3",
     "underscore": "~1.4.4",
-    "jsdom": "~0.5.2"
+    "jsdom": "~0.5.2",
+    "wrench": "~1.4.4"
   }
 }
