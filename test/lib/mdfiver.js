@@ -1,6 +1,7 @@
 var grunt = require('grunt'),
     expect = require('expect.js'),
     fs = require("fs"),
+    wrench = require("wrench"),
     mdfiver = require('../../tasks/lib/mdfiver');
 
 describe('mdfiver tests', function() {
@@ -15,6 +16,14 @@ describe('mdfiver tests', function() {
     var cssHtml = "<html><head><script type='text/javascript' src='foo/script.js'></script><LINK href='foo/styles.css' rel='stylesheet' type='text/css'></head><body></body><html>";
     var testfile = "test/data/index.html";
     var md = new mdfiver({});
+
+    before(function() {
+        fs.mkdirSync("test/tmp");
+    });
+
+    after(function() {
+        wrench.rmdirSyncRecursive("test/tmp");
+    });
 
     it("mdfiver has empty head", function() {
         expect(md.head).to.be("");

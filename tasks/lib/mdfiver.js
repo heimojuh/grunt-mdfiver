@@ -43,17 +43,19 @@ mdfiver.prototype.getPaths = function(tag) {
     var that = this;
     var paths = [];
     var suffix = tag.suffix || "";
-    _.each(this.head.getElementsByTagName(tag.tag), function(element) {
-        var p = element.getAttribute(tag.attr);
-        that.emit("log", "found path: "+p);  
-        if (p.indexOf("http://") === -1 && p !== "") {
-            paths.push(p+suffix);
-        }
-        else {
-            that.emit("log", "dropped: "+p);
-        }
-    });
-    return paths;
+        _.each(this.head.getElementsByTagName(tag.tag), function(element) {
+            var p = element.getAttribute(tag.attr);
+            that.emit("log", "found path: "+p);
+            if (p) {
+                if (p.indexOf("http://") === -1 && p !== "") {
+                    paths.push(p+suffix);
+                }
+                else {
+                    that.emit("log", "dropped: "+p);
+                }
+            }
+        });
+        return paths;
 };
 
 /***
