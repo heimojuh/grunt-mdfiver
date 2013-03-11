@@ -28,7 +28,6 @@
     "test": "grunt test"
   },
   "devDependencies": {
-    "grunt": "~0.3.16",
     "wrench": "~1.4.4"
   },
   "keywords": [
