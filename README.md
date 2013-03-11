@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/heimojuh/grunt-mdfiver.png)](https://travis-ci.org/heimojuh/grunt-mdfiver)
+
 # grunt-mdfiver
 
 Calculates md5's for cache busting. Pretty automatic, give tags you want to bust as an array (attr is the attribute
