@@ -1,7 +1,7 @@
 {
   "name": "grunt-mdfiver",
   "description": "Calculates md5s for cache busting",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/evilpupu/grunt-mdfiver",
   "author": {
     "name": "Juha Heimonen",
@@ -33,5 +33,11 @@
   },
   "keywords": [
     "gruntplugin"
-  ]
+  ],
+  "dependencies": {
+    "grunt": "~0.4.0",
+    "MD5": "~1.0.3",
+    "underscore": "~1.4.4",
+    "jsdom": "~0.5.2"
+  }
 }
