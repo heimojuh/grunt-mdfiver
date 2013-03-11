@@ -27,13 +27,13 @@ module.exports = function(grunt) {
       globals: {}
     },
     simplemocha: {
+        options: {
+            globals: ['expect'],
+            ui: 'bdd',
+            reported: 'tap'
+        },
         all: {
-            src: 'test/**/*.js',
-            options: {
-                globals: ['expect'],
-                ui: 'bdd',
-                reported: 'tap'
-            }
+            src: 'test/**/*.js'
         }
     }
   });
