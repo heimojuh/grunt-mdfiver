@@ -96,6 +96,7 @@ mdfiver.prototype.handleAssets = function() {
             var suffix = it.suffix || "";
             var md = that.createMD5FromFile(path+suffix);
             md.suffix = suffix;
+            md.filename = md.filename.replace(md.suffix, "");
             that.renameFile(md);
             that.html = that.fixHtml(md);
         });
