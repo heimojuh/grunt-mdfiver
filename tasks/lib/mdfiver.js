@@ -68,7 +68,7 @@ mdfiver.prototype.getPaths = function(tag) {
 **/
 mdfiver.prototype.createMD5FromFile = function(file) {
     this.emit("log", "md5 from: "+file);
-    var data = fs.readFileSync(file, "utf8");
+    var data = fs.readFileSync(this.basepath+file, "utf8");
     return {filename: file, md5:  md5(data)};
 };
 
