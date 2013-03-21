@@ -1,4 +1,4 @@
-var jsdom = require("jsdom").jsdom;
+var jsdom = require("jsdom").jsdom,
 md5 = require('MD5'),
 fs = require("fs"),
 _ = require("underscore"),

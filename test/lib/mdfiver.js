@@ -13,6 +13,7 @@ describe('mdfiver tests', function() {
     var plainHtml = "<html><head>HEAD CONTENT</head><body></body><html>";
     var scriptHtml = "<html><head><script type='text/javascript' src='foo/script.js'></script></head><body></body><html>";
     var scriptHtmlRjs = "<html><head><script type='text/javascript' src='foo/require.js' data-main='foo/script'></script></head><body></body><html>";
+    var scriptHtmlRjs_withDot = "<html><head><script type='text/javascript' src='foo/require.js' data-main='foo/script.min'></script></head><body></body><html>";
     var cssHtml = "<html><head><script type='text/javascript' src='foo/script.js'></script><LINK href='foo/styles.css' rel='stylesheet' type='text/css'></head><body></body><html>";
     var testfile = "test/data/index.html";
     var md = new mdfiver({});
@@ -54,6 +55,13 @@ describe('mdfiver tests', function() {
     
     });
 
+    it("manages to fill in suffix with dot (for r.js mostly)", function() {
+        md.html = scriptHtmlRjs_withDot;
+        md.parseToDom();
+        expect(md.getPaths({tag:"script", attr:"data-main", suffix: ".js"})[0]).to.be("foo/script.min.js");
+    
+    });
+
     it("Get's LINK tag from head", function() {
         md.html = cssHtml;
         md.parseToDom();
@@ -75,6 +83,14 @@ describe('mdfiver tests', function() {
         var testf = "test/tmp/testfile.txt";
         var md5hash = createTestFile(testf);
         var endResult = "test/tmp/testfile_"+md5hash+".txt";
+        md.renameFile({filename: testf, md5: md5hash});
+        expect(fs.existsSync(endResult)).to.be.ok();
+        fs.unlink(endResult);
+    });
+    it("renames file with . in name on filesystem", function() {
+        var testf = "test/tmp/testfile.min.js";
+        var md5hash = createTestFile(testf);
+        var endResult = "test/tmp/testfile.min_"+md5hash+".js";
         md.renameFile({filename: testf, md5: md5hash});
         expect(fs.existsSync(endResult)).to.be.ok();
         fs.unlink(endResult);
