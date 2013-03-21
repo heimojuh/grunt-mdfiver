@@ -69,7 +69,7 @@ describe('mdfiver tests', function() {
     });
 
     it("Calculates MD5 from given file and returns {filename: md5}", function() {
-        expect(md.createMD5FromFile(testfile)).to.eql({filename: testfile, md5: "9e4b0fb7f0847c3d5d370f9f0b1d8266"});
+        expect(md.createMD5FromFile(testfile)).to.eql({filename: testfile, md5: "4b0c677657abab51c6aa792fed43734a"});
     });
 
     it("replaces filename with md5 amended version based on fed object", function() {
@@ -77,6 +77,12 @@ describe('mdfiver tests', function() {
         md.html = filecontent;
         var fixed = md.fixHtml({filename: "css/bootstrap-responsive.min.css", md5: "6969"});
         expect(fixed.indexOf("css/bootstrap-responsive.min_6969.css")).not.to.be(-1);
+    });
+    it("replaces filename with md5 amended version based on fed object with suffix", function() {
+        var filecontent = fs.readFileSync(testfile, "utf8");
+        md.html = filecontent;
+        var fixed = md.fixHtml({filename: "js/boot.min", md5: "6969", suffix: "js"});
+        expect(fixed.indexOf("js/boot.min_6969")).not.to.be(-1);
     });
 
     it("renames file on filesystem", function() {

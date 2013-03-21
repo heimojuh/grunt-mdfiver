@@ -21,8 +21,11 @@ mdfiver.prototype = Object.create(EventEmitter.prototype);
 function createReplaceString(originalFileNameAndMd5) {
     var lastIndexOfPoint = originalFileNameAndMd5.filename.lastIndexOf(".");
     var start = originalFileNameAndMd5.filename.substring(0,lastIndexOfPoint);
-    var end = originalFileNameAndMd5.filename.substring(lastIndexOfPoint
-    );
+    var end = originalFileNameAndMd5.filename.substring(lastIndexOfPoint);
+    
+    if (originalFileNameAndMd5.suffix) {
+        return originalFileNameAndMd5.filename+"_"+originalFileNameAndMd5.md5;
+    }
     if (start !== "") {
         return start+"_"+originalFileNameAndMd5.md5+end;
     }
@@ -89,10 +92,10 @@ mdfiver.prototype.handleAssets = function() {
     var that = this;
     _.each(this.tags, function(it) {
         _.each(that.getPaths(it), function(path) {
-            var suffix = it.suffix || "";
             var md = that.createMD5FromFile(path);
+            md.suffix = it.suffix || "";
             that.renameFile(md);
-            md.filename = md.filename.replace(suffix, "");
+            md.filename = md.filename.replace(md.suffix, "");
             that.html = that.fixHtml(md);
         });
     });
