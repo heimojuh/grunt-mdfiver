@@ -51,7 +51,7 @@ mdfiver.prototype.getPaths = function(tag) {
             that.emit("log", "found path: "+p);
             if (p) {
                 if (p.indexOf("http://") === -1 && p !== "") {
-                    paths.push(p+suffix);
+                    paths.push(p);
                 }
                 else {
                     that.emit("log", "dropped: "+p);
@@ -81,8 +81,9 @@ mdfiver.prototype.fixHtml = function(replaceEntity) {
 };
 
 mdfiver.prototype.renameFile = function(originalFileNameAndMd5) {
+    var suffix = originalFileNameAndMd5.suffix || "";
     this.emit("log", "renaming: "+originalFileNameAndMd5.filename);
-    fs.renameSync(this.basepath+originalFileNameAndMd5.filename, this.basepath+createReplaceString(originalFileNameAndMd5));
+    fs.renameSync(this.basepath+originalFileNameAndMd5.filename+suffix, this.basepath+createReplaceString(originalFileNameAndMd5)+ (originalFileNameAndMd5.suffix ? originalFileNameAndMd5.suffix : ""));
 };
 
 mdfiver.prototype.handleAssets = function() {
@@ -92,10 +93,10 @@ mdfiver.prototype.handleAssets = function() {
     var that = this;
     _.each(this.tags, function(it) {
         _.each(that.getPaths(it), function(path) {
-            var md = that.createMD5FromFile(path);
-            md.suffix = it.suffix || "";
+            var suffix = it.suffix || "";
+            var md = that.createMD5FromFile(path+suffix);
+            md.suffix = suffix;
             that.renameFile(md);
-            md.filename = md.filename.replace(md.suffix, "");
             that.html = that.fixHtml(md);
         });
     });

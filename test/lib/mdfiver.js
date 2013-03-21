@@ -48,20 +48,6 @@ describe('mdfiver tests', function() {
         expect(md.getPaths({tag:"script",attr:"src"})).to.be.empty();
     });
 
-    it("manages to fill in suffix (for r.js mostly)", function() {
-        md.html = scriptHtmlRjs;
-        md.parseToDom();
-        expect(md.getPaths({tag:"script", attr:"data-main", suffix: ".js"})[0]).to.be("foo/script.js");
-    
-    });
-
-    it("manages to fill in suffix with dot (for r.js mostly)", function() {
-        md.html = scriptHtmlRjs_withDot;
-        md.parseToDom();
-        expect(md.getPaths({tag:"script", attr:"data-main", suffix: ".js"})[0]).to.be("foo/script.min.js");
-    
-    });
-
     it("Get's LINK tag from head", function() {
         md.html = cssHtml;
         md.parseToDom();
@@ -98,6 +84,14 @@ describe('mdfiver tests', function() {
         var md5hash = createTestFile(testf);
         var endResult = "test/tmp/testfile.min_"+md5hash+".js";
         md.renameFile({filename: testf, md5: md5hash});
+        expect(fs.existsSync(endResult)).to.be.ok();
+        fs.unlink(endResult);
+    });
+    it("renames file with . in name on filesystem with suffix", function() {
+        var testf = "test/tmp/testfile.min.js";
+        var md5hash = createTestFile(testf);
+        var endResult = "test/tmp/testfile.min_"+md5hash+".js";
+        md.renameFile({filename: "test/tmp/testfile.min", md5: md5hash, suffix: ".js"});
         expect(fs.existsSync(endResult)).to.be.ok();
         fs.unlink(endResult);
     });
