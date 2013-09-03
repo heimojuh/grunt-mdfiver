@@ -28,7 +28,7 @@
     "test": "grunt test"
   },
   "devDependencies": {
-    "grunt-simple-mocha": "~0.3.2",
+    "grunt-simple-mocha": "~0.4.0",
     "expect.js": "~0.2.0"
   },
   "keywords": [
@@ -38,7 +38,8 @@
     "grunt": "~0.4.0",
     "MD5": "~1.0.3",
     "underscore": "~1.4.4",
-    "jsdom": "~0.5.2",
-    "wrench": "~1.4.4"
+    "jsdom": "~0.5.7",
+    "wrench": "~1.4.4",
+    "grunt-simple-mocha": "~0.4.0"
   }
 }
