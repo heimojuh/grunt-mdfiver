@@ -35,6 +35,10 @@ function createReplaceString(originalFileNameAndMd5) {
 
 }
 
+mdfiver.prototype.checkIfValidUrl = function(p) {
+    return (!p.match(/http.?:\/\//) && p !== "");
+};
+
 mdfiver.prototype.parseToDom = function() {
     this.head = jsdom( 
         this.html,
@@ -50,7 +54,7 @@ mdfiver.prototype.getPaths = function(tag) {
             var p = element.getAttribute(tag.attr);
             that.emit("log", "found path: "+p);
             if (p) {
-                if (p.indexOf("http://") === -1 && p !== "") {
+                if (that.checkIfValidUrl(p)) {
                     paths.push(p);
                 }
                 else {

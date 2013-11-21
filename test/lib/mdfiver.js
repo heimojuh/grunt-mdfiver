@@ -47,6 +47,14 @@ describe('mdfiver tests', function() {
         md.parseToDom();
         expect(md.getPaths({tag:"script",attr:"src"})).to.be.empty();
     });
+    
+    it("returns false on http starting url", function() {
+        expect(md.checkIfValidUrl("http://foo")).not.to.be.ok();
+    });
+
+    it("returns false on https starting url", function() {
+        expect(md.checkIfValidUrl("https://foo")).not.to.be.ok();
+    });
 
     it("Get's LINK tag from head", function() {
         md.html = cssHtml;
